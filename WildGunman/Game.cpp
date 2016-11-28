@@ -8,6 +8,7 @@ Game::Game()
 	_window->setMouseCursorVisible(false);
 	_txBackground.loadFromFile("Images/background.png");
 	_background.setTexture(_txBackground);
+	InitBarWindows();
 }
 
 
@@ -51,4 +52,17 @@ void Game::Draw()
 	_window->draw(_background);
 	_crosshair.Draw(_window);
 	_window->display();
+}
+
+void Game::SpawnEnemies()
+{
+}
+
+void Game::InitBarWindows()
+{
+	_bws[0] = BarWindow(165, 163);
+	_bws[1] = BarWindow(609, 163);
+	_bws[2] = BarWindow(131, 367);
+	_bws[3] = BarWindow(630, 367);
+	_bws[4] = BarWindow(388, 367);
 }

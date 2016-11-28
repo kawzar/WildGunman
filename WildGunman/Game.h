@@ -1,14 +1,17 @@
 #pragma once
 #include "Enemy.h";
 #include "Crosshair.h";
+#include "BarWindow.h";
+#include <list>
 
 class Game
 {
-	Enemy *_enemies;
+	std::list<Enemy> _enemies;
 	Crosshair _crosshair;
 	RenderWindow *_window;
 	Texture _txBackground;
 	Sprite _background;
+	BarWindow _bws[5];
 
 public:
 	Game();
@@ -17,6 +20,10 @@ public:
 	void EventHandling();
 	void Update();
 	void Draw();
+	void SpawnEnemies();
+
+private:
+	void InitBarWindows();
 
 };
 
