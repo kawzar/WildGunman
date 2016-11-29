@@ -6,7 +6,7 @@
 
 class Game
 {
-	std::list<Enemy> _enemies;
+	std::list<Enemy*> _enemies;
 	Crosshair _crosshair;
 	RenderWindow *_window;
 	Texture _txBackground;

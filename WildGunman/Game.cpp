@@ -65,8 +65,8 @@ void Game::SpawnEnemies()
 		int index = rand() % 5;
 		if(_bws[index].IsEmpty())
 		{
-			Enemy newEnemy = Enemy();
-			newEnemy.Show((Vector2f)_bws[index].GetPosition());
+			Enemy* newEnemy = new Enemy();
+			newEnemy->Show((Vector2f)_bws[index].GetPosition());
 			_enemies.push_back(newEnemy);
 			_bws[index].ToggleEmpty();
 		}
@@ -84,8 +84,11 @@ void Game::InitBarWindows()
 
 void Game::DrawEnemies()
 {
-	for each (Enemy e in _enemies)
+	for each (Enemy* e in _enemies)
 	{
-		e.Draw(_window);
+		if (e->IsShowing())
+		{
+			e->Draw(_window);
+		}
 	}
 }

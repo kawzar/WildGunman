@@ -6,7 +6,7 @@ Enemy::Enemy()
 {
 	_isAlive = true;
 	_isShowing = false;
-	_tx.loadFromFile("Images/enemy2.png");
+	_tx.loadFromFile("Images/enemy4.png");
 	_sprite.setTexture(_tx);
 	_sprite.setOrigin(_tx.getSize().x / 2, _tx.getSize().y);
 }
