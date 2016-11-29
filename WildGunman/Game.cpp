@@ -22,6 +22,7 @@ void Game::Loop()
 	{
 		EventHandling();
 		Update();
+		SpawnEnemies();
 		Draw();
 	}
 }
@@ -48,7 +49,8 @@ void Game::Update()
 
 void Game::Draw()
 {
-	_window->clear(Color::Black);
+	_window->clear();
+	DrawEnemies();
 	_window->draw(_background);
 	_crosshair.Draw(_window);
 	_window->display();
@@ -56,6 +58,19 @@ void Game::Draw()
 
 void Game::SpawnEnemies()
 {
+	bool spawn = rand() % 100 < 5;
+
+	if (spawn)
+	{
+		int index = rand() % 5;
+		if(_bws[index].IsEmpty())
+		{
+			Enemy newEnemy = Enemy();
+			newEnemy.Show((Vector2f)_bws[index].GetPosition());
+			_enemies.push_back(newEnemy);
+			_bws[index].ToggleEmpty();
+		}
+	}
 }
 
 void Game::InitBarWindows()
@@ -65,4 +80,12 @@ void Game::InitBarWindows()
 	_bws[2] = BarWindow(131, 367);
 	_bws[3] = BarWindow(630, 367);
 	_bws[4] = BarWindow(388, 367);
+}
+
+void Game::DrawEnemies()
+{
+	for each (Enemy e in _enemies)
+	{
+		e.Draw(_window);
+	}
 }
