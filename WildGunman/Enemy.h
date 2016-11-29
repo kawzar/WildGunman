@@ -8,6 +8,7 @@ class Enemy
 {
 	bool _isAlive;
 	bool _isShowing;
+	bool _hasWindow;
 	float _visibleTime;
 	Texture _tx;
 	Sprite _sprite;
@@ -18,6 +19,7 @@ public:
 	~Enemy();
 	bool IsAlive();
 	bool IsShowing();
+	bool IsActive();
 	void Show(Vector2f position);
 	void Draw(RenderWindow *window);
 	void Update();

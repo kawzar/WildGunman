@@ -9,6 +9,7 @@ Game::Game()
 	_txBackground.loadFromFile("Images/background.png");
 	_background.setTexture(_txBackground);
 	InitBarWindows();
+	InitEnemies();
 }
 
 
@@ -58,17 +59,19 @@ void Game::Draw()
 
 void Game::SpawnEnemies()
 {
-	bool spawn = rand() % 100 < 5;
+	bool spawn = rand() % 200 < 25;
 
 	if (spawn)
 	{
 		int index = rand() % 5;
-		if(_bws[index].IsEmpty())
+		if (_bws[index].IsEmpty())
 		{
-			Enemy* newEnemy = new Enemy();
-			newEnemy->Show((Vector2f)_bws[index].GetPosition());
-			_enemies.push_back(newEnemy);
-			_bws[index].ToggleEmpty();
+			Enemy* enemy = GetInactiveEnemy();
+			if (enemy != nullptr)
+			{
+				enemy->Show((Vector2f)_bws[index].GetPosition());
+				_bws[index].ToggleEmpty();
+			}
 		}
 	}
 }
@@ -92,4 +95,25 @@ void Game::UpdateAndDrawEnemies()
 			e->Draw(_window);
 		}
 	}
+}
+
+void Game::InitEnemies()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		_enemies.push_back(new Enemy());
+	}
+}
+
+Enemy * Game::GetInactiveEnemy()
+{
+	for each (Enemy* e in _enemies)
+	{
+		if (!e->IsActive() && e->IsAlive())
+		{
+			return e;
+		}
+	}
+
+	return nullptr;
 }
