@@ -8,8 +8,10 @@ class Enemy
 {
 	bool _isAlive;
 	bool _isShowing;
+	float _visibleTime;
 	Texture _tx;
 	Sprite _sprite;
+	Clock _clock;
 
 public:
 	Enemy();
@@ -18,5 +20,6 @@ public:
 	bool IsShowing();
 	void Show(Vector2f position);
 	void Draw(RenderWindow *window);
+	void Update();
 };
 

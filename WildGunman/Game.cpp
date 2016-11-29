@@ -50,7 +50,7 @@ void Game::Update()
 void Game::Draw()
 {
 	_window->clear();
-	DrawEnemies();
+	UpdateAndDrawEnemies();
 	_window->draw(_background);
 	_crosshair.Draw(_window);
 	_window->display();
@@ -82,12 +82,13 @@ void Game::InitBarWindows()
 	_bws[4] = BarWindow(388, 367);
 }
 
-void Game::DrawEnemies()
+void Game::UpdateAndDrawEnemies()
 {
 	for each (Enemy* e in _enemies)
 	{
 		if (e->IsShowing())
 		{
+			e->Update();
 			e->Draw(_window);
 		}
 	}

@@ -24,7 +24,7 @@ public:
 
 private:
 	void InitBarWindows();
-	void DrawEnemies();
+	void UpdateAndDrawEnemies();
 
 };
 
