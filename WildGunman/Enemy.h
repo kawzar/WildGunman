@@ -29,6 +29,7 @@ public:
 	void Draw(RenderWindow *window);
 	void Update();
 	void Die();
-	int Points();
+	virtual bool Shoot();
+	virtual int Points();
 };
 

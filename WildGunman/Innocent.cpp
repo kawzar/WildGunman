@@ -24,3 +24,8 @@ int Innocent::Points()
 {
 	return -10;
 }
+
+bool Innocent::Shoot()
+{
+	return false;
+}

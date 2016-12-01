@@ -7,4 +7,5 @@ public:
 	Innocent();
 	~Innocent();
 	int Points();
+	bool Shoot();
 };

@@ -7,7 +7,7 @@ Enemy::Enemy()
 	_isAlive = true;
 	_isShowing = false;
 	_hasWindow = false;
-	_visibleTime = 0.7f;
+	_visibleTime = 1;
 	_notVisibleTime = 1.3f;
 	_clock.restart();
 	_tx.loadFromFile("Images/enemy4.png");
@@ -86,6 +86,18 @@ void Enemy::Die()
 	_isAlive = false;
 	_isShowing = false;
 	_window->ToggleEmpty();
+}
+
+bool Enemy::Shoot()
+{
+	bool shoot = false;
+
+	if (_isShowing )
+	{
+		shoot = rand() % 100 == 47;
+	}
+	
+	return shoot;
 }
 
 int Enemy::Points()

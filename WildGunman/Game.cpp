@@ -5,6 +5,10 @@
 Game::Game()
 {
 	_points = 0;	
+	_lifes = 3;
+	_shootTime = 10.5f;
+	_shootClock.restart();
+
 	InitWindow();
 	InitText();
 	InitSound();	
@@ -62,6 +66,7 @@ void Game::Draw()
 	_window->draw(_background);
 	_crosshair.Draw(_window);
 	_window->draw(_txtPoints);
+	_window->draw(_txtLifes);
 	_window->display();
 }
 
@@ -69,7 +74,7 @@ void Game::SpawnEnemies()
 {
 	bool spawn = rand() % 200 == 33;
 
-	if (spawn)
+	if (spawn && GetEmptyBarWindowCount() > 2)
 	{
 		int index = rand() % 5;
 		if (_bws[index].IsEmpty())
@@ -91,10 +96,24 @@ void Game::CheckCollisions()
 	{
 		if (enemy->IsActive() && enemy->IsShowing() && enemy->Intersects(playerPosition.x, playerPosition.y))
 		{
-			UpdateScore(enemy->Points());
+			int pts = enemy->Points();
+			UpdateScore(pts);
 			enemy->Die();
+
+			if (pts < 0) // logic for innocents. This is the best idea i had without making the enemies to know the game -- i wanted to avoid circular reference. 
+			{
+				_lifes--;
+				UpdateLifes();
+			}
 		}
 	}
+}
+
+void Game::ShootAtPlayer()
+{
+	_hitSound.play();
+	_lifes--;
+	UpdateLifes();
 }
 
 void Game::InitBarWindows()
@@ -122,6 +141,12 @@ void Game::UpdateEnemies()
 	for each (Enemy* enemy in _enemies)
 	{
 		enemy->Update();
+
+		if (_shootClock.getElapsedTime().asSeconds() > _shootTime && enemy->IsActive() && enemy->Shoot())
+		{
+			ShootAtPlayer();
+			_shootClock.restart();
+		}
 	}
 }
 
@@ -136,6 +161,15 @@ void Game::UpdateScore(int points)
 
 }
 
+void Game::UpdateLifes()
+{
+	char lf[10];
+	char life[20] = "Lifes: ";
+	_itoa_s(_lifes, lf, 10);
+	strcat_s(life, lf);
+	_txtLifes.setString(life);
+}
+
 void Game::InitWindow()
 {
 	_window = new RenderWindow(VideoMode(780, 438), "Wild Gunman");
@@ -147,17 +181,26 @@ void Game::InitWindow()
 void Game::InitText()
 {
 	_font.loadFromFile("Fonts/LCD_Solid.ttf");
+
 	_txtPoints.setFont(_font);
 	_txtPoints.setPosition(56, 410);
 	_txtPoints.setString("Score: ");
 	_txtPoints.setCharacterSize(20);
 	_txtPoints.setOutlineColor(Color::White);
+
+	_txtLifes.setFont(_font);
+	_txtLifes.setPosition(250, 410);
+	_txtLifes.setString("Lifes: 3");
+	_txtLifes.setCharacterSize(20);
+	_txtLifes.setOutlineColor(Color::White);
 }
 
 void Game::InitSound()
 {
 	_sbuffer.loadFromFile("Sounds/gun.wav");
 	_gunSound.setBuffer(_sbuffer);
+	_sbHit.loadFromFile("Sounds/Hit_Hurt2.wav");
+	_hitSound.setBuffer(_sbHit);
 }
 
 int Game::GetAliveEnemyCount()
@@ -175,11 +218,26 @@ int Game::GetAliveEnemyCount()
 	return count;
 }
 
+int Game::GetEmptyBarWindowCount()
+{
+	int count = 0;
+
+	for (int i = 0; i < 5; i++)
+	{
+		if(_bws[i].IsEmpty())
+		{
+			count++;
+		}
+	}
+
+	return count;
+}
+
 void Game::InitEnemies()
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 20; i++)
 	{
-		bool innocent = rand() % 100 == 17;
+		bool innocent = rand() % 100 < 25;
 
 		if (innocent)
 		{

@@ -9,6 +9,8 @@
 class Game
 {
 	int _points;
+	int _lifes;
+	float _shootTime;
 	std::list<Enemy*> _enemies;
 	Crosshair _crosshair;
 	RenderWindow *_window;
@@ -16,9 +18,14 @@ class Game
 	Sprite _background;
 	BarWindow _bws[5];
 	Text _txtPoints;
+	Text _txtLifes;
 	Font _font;
 	SoundBuffer _sbuffer;
+	SoundBuffer _sbHit;
+	Sound _hitSound;
 	Sound _gunSound;
+	Clock _shootClock;
+
 
 public:
 	Game();
@@ -29,6 +36,7 @@ public:
 	void Draw();
 	void SpawnEnemies();
 	void CheckCollisions();
+	void ShootAtPlayer();
 
 private:
 	void InitBarWindows();
@@ -36,10 +44,12 @@ private:
 	void InitEnemies();
 	void UpdateEnemies();
 	void UpdateScore(int points);
+	void UpdateLifes();
 	void InitWindow();
 	void InitText();
 	void InitSound();
 	int GetAliveEnemyCount();
+	int GetEmptyBarWindowCount();
 	Enemy* GetInactiveEnemy();
 
 };
