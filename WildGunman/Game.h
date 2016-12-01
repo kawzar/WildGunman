@@ -4,16 +4,21 @@
 #include "Crosshair.h";
 #include "BarWindow.h";
 #include <list>
+#include <SFML\Audio.hpp>
 
 class Game
 {
-	int points;
+	int _points;
 	std::list<Enemy*> _enemies;
 	Crosshair _crosshair;
 	RenderWindow *_window;
 	Texture _txBackground;
 	Sprite _background;
 	BarWindow _bws[5];
+	Text _txtPoints;
+	Font _font;
+	SoundBuffer _sbuffer;
+	Sound _gunSound;
 
 public:
 	Game();
@@ -30,6 +35,11 @@ private:
 	void DrawEnemies();
 	void InitEnemies();
 	void UpdateEnemies();
+	void UpdateScore(int points);
+	void InitWindow();
+	void InitText();
+	void InitSound();
+	int GetAliveEnemyCount();
 	Enemy* GetInactiveEnemy();
 
 };

@@ -4,11 +4,10 @@
 
 Game::Game()
 {
-	points = 0;
-	_window = new RenderWindow(VideoMode(780, 438), "Wild Gunman");
-	_window->setMouseCursorVisible(false);
-	_txBackground.loadFromFile("Images/background.png");
-	_background.setTexture(_txBackground);
+	_points = 0;	
+	InitWindow();
+	InitText();
+	InitSound();	
 	InitBarWindows();
 	InitEnemies();
 }
@@ -42,6 +41,7 @@ void Game::EventHandling()
 		case Event::MouseButtonPressed:
 			if (evt.mouseButton.button == Mouse::Button::Left)
 			{
+				_gunSound.play();
 				CheckCollisions();
 			}
 		}
@@ -61,6 +61,7 @@ void Game::Draw()
 	DrawEnemies();
 	_window->draw(_background);
 	_crosshair.Draw(_window);
+	_window->draw(_txtPoints);
 	_window->display();
 }
 
@@ -88,9 +89,9 @@ void Game::CheckCollisions()
 
 	for each (Enemy* enemy in _enemies)
 	{
-		if (enemy->IsActive() && enemy->Intersects(playerPosition.x, playerPosition.y))
+		if (enemy->IsActive() && enemy->IsShowing() && enemy->Intersects(playerPosition.x, playerPosition.y))
 		{
-			points += enemy->Points();
+			UpdateScore(enemy->Points());
 			enemy->Die();
 		}
 	}
@@ -122,6 +123,56 @@ void Game::UpdateEnemies()
 	{
 		enemy->Update();
 	}
+}
+
+void Game::UpdateScore(int points)
+{
+	_points += points;
+	char pt[10];
+	char score[20] = "Score: ";
+	_itoa_s(_points, pt, 10);
+	strcat_s(score, pt);
+	_txtPoints.setString(score);
+
+}
+
+void Game::InitWindow()
+{
+	_window = new RenderWindow(VideoMode(780, 438), "Wild Gunman");
+	_window->setMouseCursorVisible(false);
+	_txBackground.loadFromFile("Images/background.png");
+	_background.setTexture(_txBackground);
+}
+
+void Game::InitText()
+{
+	_font.loadFromFile("Fonts/LCD_Solid.ttf");
+	_txtPoints.setFont(_font);
+	_txtPoints.setPosition(56, 410);
+	_txtPoints.setString("Score: ");
+	_txtPoints.setCharacterSize(20);
+	_txtPoints.setOutlineColor(Color::White);
+}
+
+void Game::InitSound()
+{
+	_sbuffer.loadFromFile("Sounds/gun.wav");
+	_gunSound.setBuffer(_sbuffer);
+}
+
+int Game::GetAliveEnemyCount()
+{
+	int count = 0;
+
+	for each (Enemy* e in _enemies)
+	{
+		if (e->IsAlive())
+		{
+			count++;
+		}
+	}
+
+	return count;
 }
 
 void Game::InitEnemies()
