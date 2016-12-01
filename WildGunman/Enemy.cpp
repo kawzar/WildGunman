@@ -7,8 +7,8 @@ Enemy::Enemy()
 	_isAlive = true;
 	_isShowing = false;
 	_hasWindow = false;
-	_visibleTime = 1;
-	_notVisibleTime = 1.3f;
+	_visibleTime = 1.2f;
+	_notVisibleTime = 3.3f;
 	_clock.restart();
 	_tx.loadFromFile("Images/enemy4.png");
 	_sprite.setTexture(_tx);

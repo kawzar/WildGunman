@@ -19,6 +19,7 @@ class Game
 	BarWindow _bws[5];
 	Text _txtPoints;
 	Text _txtLifes;
+	Text _txtResult;
 	Font _font;
 	SoundBuffer _sbuffer;
 	SoundBuffer _sbHit;
@@ -37,6 +38,7 @@ public:
 	void SpawnEnemies();
 	void CheckCollisions();
 	void ShootAtPlayer();
+	void ShowGameOverScreen();
 
 private:
 	void InitBarWindows();

@@ -25,11 +25,27 @@ void Game::Loop()
 {
 	while (_window->isOpen())
 	{
-		EventHandling();
-		Update();
-		SpawnEnemies();
-		Draw();
+		if (GetAliveEnemyCount() > 0 && _lifes > 0)
+		{
+			EventHandling();
+			Update();
+			SpawnEnemies();
+			Draw();
+		}
+		else
+		{
+			ShowGameOverScreen();
+			Event evt;
+			while (_window->pollEvent(evt))
+			{
+				if (evt.type == Event::Closed)
+				{
+					_window->close();
+				}
+			}
+		}
 	}
+
 }
 
 void Game::EventHandling()
@@ -116,6 +132,22 @@ void Game::ShootAtPlayer()
 	UpdateLifes();
 }
 
+void Game::ShowGameOverScreen()
+{
+	_window->clear();
+
+	if (_lifes > 0)
+	{
+		_txtResult.setString("You defeated all enemies!");		
+	}
+	
+	_window->setMouseCursorVisible(true);
+	_window->draw(_txtResult);
+	_txtPoints.setPosition(100, 200);
+	_window->draw(_txtPoints);
+	_window->display();
+}
+
 void Game::InitBarWindows()
 {
 	_bws[0] = BarWindow(165, 163);
@@ -193,6 +225,12 @@ void Game::InitText()
 	_txtLifes.setString("Lifes: 3");
 	_txtLifes.setCharacterSize(20);
 	_txtLifes.setOutlineColor(Color::White);
+
+	_txtResult.setFont(_font);
+	_txtResult.setPosition(100, 100);
+	_txtResult.setString("Game Over");
+	_txtResult.setCharacterSize(20);
+	_txtResult.setOutlineColor(Color::White);
 }
 
 void Game::InitSound()
@@ -209,7 +247,7 @@ int Game::GetAliveEnemyCount()
 
 	for each (Enemy* e in _enemies)
 	{
-		if (e->IsAlive())
+		if (e->IsAlive() && e->Points() > 0)
 		{
 			count++;
 		}
@@ -235,13 +273,16 @@ int Game::GetEmptyBarWindowCount()
 
 void Game::InitEnemies()
 {
+	int innocentCount = 2;
+
 	for (int i = 0; i < 20; i++)
 	{
 		bool innocent = rand() % 100 < 25;
 
-		if (innocent)
+		if (innocent && innocentCount > 0)
 		{
 			_enemies.push_back(new Innocent());
+			innocentCount--; // to prevent blocking the windows
 		}
 		else
 		{
