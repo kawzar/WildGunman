@@ -2,7 +2,7 @@
 
 int main()
 {
-	srand(NULL);
+	srand(time(NULL));
 	Game game;
 	game.Loop();
 }

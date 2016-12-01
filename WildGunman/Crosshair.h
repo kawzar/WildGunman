@@ -14,5 +14,6 @@ public:
 	~Crosshair();
 	void Draw(RenderWindow *wnd);
 	void SetPosition(Vector2f position);
+	Vector2f GetPosition();
 };
 

@@ -1,11 +1,13 @@
 #pragma once
 #include "Enemy.h";
+#include "Innocent.h"
 #include "Crosshair.h";
 #include "BarWindow.h";
 #include <list>
 
 class Game
 {
+	int points;
 	std::list<Enemy*> _enemies;
 	Crosshair _crosshair;
 	RenderWindow *_window;
@@ -21,6 +23,7 @@ public:
 	void Update();
 	void Draw();
 	void SpawnEnemies();
+	void CheckCollisions();
 
 private:
 	void InitBarWindows();

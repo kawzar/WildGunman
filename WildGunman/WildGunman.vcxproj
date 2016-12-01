@@ -157,12 +157,14 @@
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Innocent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BarWindow.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Innocent.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

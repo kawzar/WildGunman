@@ -8,6 +8,7 @@ Enemy::Enemy()
 	_isShowing = false;
 	_hasWindow = false;
 	_visibleTime = 0.7f;
+	_notVisibleTime = 1.3f;
 	_clock.restart();
 	_tx.loadFromFile("Images/enemy4.png");
 	_sprite.setTexture(_tx);
@@ -34,13 +35,21 @@ bool Enemy::IsActive()
 	return _isAlive && _hasWindow;
 }
 
-void Enemy::Show(Vector2f position)
+bool Enemy::Intersects(float x, float y)
+{
+	FloatRect bounds = _sprite.getGlobalBounds();
+	return bounds.contains(x, y);
+}
+
+void Enemy::Show(BarWindow *bw)
 {
 	if (!_isShowing)
 	{
+		_window = bw;
 		_isShowing = true;
 		_hasWindow = true;
-		_sprite.setPosition(position);
+		_window->ToggleEmpty();
+		_sprite.setPosition((Vector2f)_window->GetPosition());
 		_clock.restart();
 	}
 }
@@ -55,16 +64,31 @@ void Enemy::Draw(RenderWindow * window)
 
 void Enemy::Update()
 {
-	if (_isShowing && _clock.getElapsedTime().asSeconds() > _visibleTime)
+	if (_isAlive)
 	{
-		_isShowing = false;
-		_clock.restart();
-		return;
+		if (_isShowing && _clock.getElapsedTime().asSeconds() > _visibleTime)
+		{
+			_isShowing = false;
+			_clock.restart();
+			return;
+		}
+		if (!_isShowing && _clock.getElapsedTime().asSeconds() > _notVisibleTime)
+		{
+			_isShowing = true;
+			_clock.restart();
+			return;
+		}
 	}
-	if(!_isShowing && _clock.getElapsedTime().asSeconds() > _visibleTime)
-	{
-		_isShowing = true;
-		_clock.restart();
-		return;
-	}
+}
+
+void Enemy::Die()
+{
+	_isAlive = false;
+	_isShowing = false;
+	_window->ToggleEmpty();
+}
+
+int Enemy::Points()
+{
+	return 10;
 }

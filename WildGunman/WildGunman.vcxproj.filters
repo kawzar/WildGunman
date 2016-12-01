@@ -27,6 +27,9 @@
     <ClInclude Include="BarWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Innocent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Crosshair.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BarWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Innocent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

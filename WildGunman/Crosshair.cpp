@@ -24,3 +24,8 @@ void Crosshair::SetPosition(Vector2f position)
 {
 	_sprite.setPosition(position);
 }
+
+Vector2f Crosshair::GetPosition()
+{
+	return _sprite.getPosition();
+}

@@ -4,6 +4,7 @@
 
 Game::Game()
 {
+	points = 0;
 	_window = new RenderWindow(VideoMode(780, 438), "Wild Gunman");
 	_window->setMouseCursorVisible(false);
 	_txBackground.loadFromFile("Images/background.png");
@@ -38,6 +39,11 @@ void Game::EventHandling()
 		case Event::Closed:
 			_window->close();
 			break;
+		case Event::MouseButtonPressed:
+			if (evt.mouseButton.button == Mouse::Button::Left)
+			{
+				CheckCollisions();
+			}
 		}
 	}
 }
@@ -70,9 +76,22 @@ void Game::SpawnEnemies()
 			Enemy* enemy = GetInactiveEnemy();
 			if (enemy != nullptr)
 			{
-				enemy->Show((Vector2f)_bws[index].GetPosition());
-				_bws[index].ToggleEmpty();
+				enemy->Show( &_bws[index]);
 			}
+		}
+	}
+}
+
+void Game::CheckCollisions()
+{
+	Vector2f playerPosition = _crosshair.GetPosition();
+
+	for each (Enemy* enemy in _enemies)
+	{
+		if (enemy->IsActive() && enemy->Intersects(playerPosition.x, playerPosition.y))
+		{
+			points += enemy->Points();
+			enemy->Die();
 		}
 	}
 }
@@ -107,9 +126,18 @@ void Game::UpdateEnemies()
 
 void Game::InitEnemies()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		_enemies.push_back(new Enemy());
+		bool innocent = rand() % 100 == 17;
+
+		if (innocent)
+		{
+			_enemies.push_back(new Innocent());
+		}
+		else
+		{
+			_enemies.push_back(new Enemy());
+		}
 	}
 }
 
