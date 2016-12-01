@@ -24,8 +24,9 @@ public:
 
 private:
 	void InitBarWindows();
-	void UpdateAndDrawEnemies();
+	void DrawEnemies();
 	void InitEnemies();
+	void UpdateEnemies();
 	Enemy* GetInactiveEnemy();
 
 };

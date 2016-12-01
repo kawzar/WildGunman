@@ -46,12 +46,13 @@ void Game::Update()
 {
 	Vector2i mousePos = Mouse::getPosition(*_window);
 	_crosshair.SetPosition((Vector2f)mousePos);
+	UpdateEnemies();
 }
 
 void Game::Draw()
 {
 	_window->clear();
-	UpdateAndDrawEnemies();
+	DrawEnemies();
 	_window->draw(_background);
 	_crosshair.Draw(_window);
 	_window->display();
@@ -59,7 +60,7 @@ void Game::Draw()
 
 void Game::SpawnEnemies()
 {
-	bool spawn = rand() % 200 < 25;
+	bool spawn = rand() % 200 == 33;
 
 	if (spawn)
 	{
@@ -85,15 +86,22 @@ void Game::InitBarWindows()
 	_bws[4] = BarWindow(388, 367);
 }
 
-void Game::UpdateAndDrawEnemies()
+void Game::DrawEnemies()
 {
 	for each (Enemy* e in _enemies)
 	{
 		if (e->IsShowing())
 		{
-			e->Update();
 			e->Draw(_window);
 		}
+	}
+}
+
+void Game::UpdateEnemies()
+{
+	for each (Enemy* enemy in _enemies)
+	{
+		enemy->Update();
 	}
 }
 
